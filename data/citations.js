@@ -176,6 +176,197 @@ window.CITATIONS = [
     example: false
   },
 
+  /* ---------- Audio evolution: from soot-traced waves to software synths ---------- */
+  {
+    id: "scott-phonautograph",
+    title: "The phonautograph",
+    creator: "Édouard-Léon Scott de Martinville",
+    year: 1857,
+    country: "France",
+    lat: 48.8566, lon: 2.3522,
+    place: "Paris",
+    description:
+      "The earliest known sound-recording device: a horn, a membrane and a bristle that traced sound waves onto soot-blackened paper. It could only draw sound, not play it back, but in 2008 researchers scanned an old tracing and finally heard a recording of \"Au clair de la lune\". The first stop in the audio-evolution story.",
+    links: [
+      { label: "Wikipedia: Phonautograph", url: "https://en.wikipedia.org/wiki/Phonautograph" },
+      { label: "Wikipedia: Édouard-Léon Scott de Martinville", url: "https://en.wikipedia.org/wiki/%C3%89douard-L%C3%A9on_Scott_de_Martinville" }
+    ],
+    tags: ["audio-evolution", "recording", "invention"],
+    example: false
+  },
+  {
+    id: "edison-phonograph",
+    title: "The phonograph",
+    creator: "Thomas Edison",
+    year: 1877,
+    country: "United States of America",
+    lat: 40.5436, lon: -74.3293,
+    place: "Menlo Park, New Jersey",
+    description:
+      "At his Menlo Park laboratory Edison built the first machine that could both record sound and play it back, first onto tinfoil wrapped around a grooved cylinder. Where Scott's phonautograph only drew sound, this one could finally talk back.",
+    links: [
+      { label: "Wikipedia: Phonograph", url: "https://en.wikipedia.org/wiki/Phonograph" },
+      { label: "Wikipedia: Thomas Edison", url: "https://en.wikipedia.org/wiki/Thomas_Edison" }
+    ],
+    tags: ["audio-evolution", "recording", "invention"],
+    example: false
+  },
+  {
+    id: "poulsen-telegraphone",
+    title: "The telegraphone (magnetic recording)",
+    creator: "Valdemar Poulsen",
+    year: 1898,
+    country: "Denmark",
+    lat: 55.6761, lon: 12.5683,
+    place: "Copenhagen",
+    description:
+      "Danish engineer Valdemar Poulsen patented a machine that recorded sound as magnetic patterns on steel wire. It was the beginning of magnetic recording, the idea that later grew into recording tape.",
+    links: [
+      { label: "Wikipedia: Valdemar Poulsen", url: "https://en.wikipedia.org/wiki/Valdemar_Poulsen" }
+    ],
+    tags: ["audio-evolution", "recording", "invention"],
+    example: false
+  },
+  {
+    id: "blumlein-stereo",
+    title: "Stereophonic sound (\"binaural sound\")",
+    creator: "Alan Blumlein",
+    year: 1931,
+    country: "United Kingdom",
+    lat: 51.5033, lon: -0.422,
+    place: "Hayes, London",
+    description:
+      "Working at EMI's research labs in Hayes, Alan Blumlein patented what he called \"binaural sound\", which we now call stereo. The idea came from the cinema, where an actor on one side of the screen could be heard from the other. In 1934 he recorded Mozart's Jupiter Symphony at Abbey Road with his technique.",
+    links: [
+      { label: "Wikipedia: Alan Blumlein", url: "https://en.wikipedia.org/wiki/Alan_Blumlein" },
+      { label: "Wikipedia: Stereophonic sound", url: "https://en.wikipedia.org/wiki/Stereophonic_sound" }
+    ],
+    tags: ["audio-evolution", "recording", "stereo"],
+    example: false
+  },
+  {
+    id: "mathews-music-program",
+    title: "MUSIC, the first widely used computer-music program",
+    creator: "Max Mathews",
+    year: 1957,
+    country: "United States of America",
+    lat: 40.684, lon: -74.401,
+    place: "Bell Labs, New Jersey",
+    description:
+      "Max Mathews wrote MUSIC at Bell Labs, and an IBM 704 played a 17-second piece from it. It was the first widely used program for making sound on a computer, and its family of descendants includes Csound. He also worked with John Chowning, whose FM synthesis is elsewhere on this globe.",
+    links: [
+      { label: "Wikipedia: Max Mathews", url: "https://en.wikipedia.org/wiki/Max_Mathews" },
+      { label: "Wikipedia: MUSIC-N", url: "https://en.wikipedia.org/wiki/MUSIC-N" }
+    ],
+    tags: ["audio-evolution", "computer music", "synthesis", "digital audio"],
+    example: false
+  },
+  {
+    id: "moog-modular-synthesizer",
+    title: "The Moog modular synthesizer",
+    creator: "Robert Moog",
+    year: 1964,
+    country: "United States of America",
+    lat: 42.5409, lon: -76.6666,
+    place: "Trumansburg, New York",
+    description:
+      "Robert Moog, who also built theremins, began work in Trumansburg and debuted his voltage-controlled modular synthesizer at the 1964 Audio Engineering Society convention. It became the first commercial synthesizer and made the analog synth a real instrument.",
+    links: [
+      { label: "Wikipedia: Moog synthesizer", url: "https://en.wikipedia.org/wiki/Moog_synthesizer" },
+      { label: "Wikipedia: Robert Moog", url: "https://en.wikipedia.org/wiki/Robert_Moog" }
+    ],
+    tags: ["audio-evolution", "music", "synthesis", "invention"],
+    example: false
+  },
+  {
+    id: "neve-1073-consoles",
+    title: "Neve consoles & the 1073 preamp/EQ",
+    creator: "Rupert Neve",
+    year: 1970,
+    country: "United Kingdom",
+    lat: 52.0897, lon: 0.0176,
+    place: "Melbourn, Cambridgeshire",
+    description:
+      "Rupert Neve founded Neve Electronics in 1961 and built one of the first transistor-based mixing consoles (for Philips Studios in London in 1964), then designed the 1073 module in 1970 at the company he led from near Cambridge. Its transformer-based sound is still copied by studios and makers today, and he received a Technical Grammy in 1997.",
+    links: [
+      { label: "Wikipedia: Rupert Neve", url: "https://en.wikipedia.org/wiki/Rupert_Neve" },
+      { label: "Wikipedia: Neve Electronics", url: "https://en.wikipedia.org/wiki/Neve_Electronics" }
+    ],
+    tags: ["audio-evolution", "recording", "mixing", "analog"],
+    example: false
+  },
+  {
+    id: "midi-kakehashi-smith",
+    title: "MIDI (Musical Instrument Digital Interface)",
+    creator: "Ikutaro Kakehashi (Roland) & Dave Smith (Sequential)",
+    year: 1983,
+    country: "Japan",
+    lat: 34.6937, lon: 135.5023,
+    place: "Osaka",
+    description:
+      "Roland's Ikutaro Kakehashi, who founded Roland in Osaka, and Sequential's Dave Smith helped create a common language for electronic instruments. At the 1983 Winter NAMM show a Sequential Prophet-600 was successfully connected to a Roland Jupiter-6, and the two shared a 2013 Technical Grammy.",
+    links: [
+      { label: "Wikipedia: MIDI", url: "https://en.wikipedia.org/wiki/MIDI" },
+      { label: "Wikipedia: Ikutaro Kakehashi", url: "https://en.wikipedia.org/wiki/Ikutaro_Kakehashi" },
+      { label: "Wikipedia: Dave Smith (engineer)", url: "https://en.wikipedia.org/wiki/Dave_Smith_(engineer)" }
+    ],
+    tags: ["audio-evolution", "music", "standards", "digital audio"],
+    example: false
+  },
+  {
+    id: "fruityloops-fl-studio",
+    title: "FruityLoops (FL Studio)",
+    creator: "Didier \"Gol\" Dambrin (Image-Line)",
+    year: 1997,
+    country: "Belgium",
+    lat: 51.0543, lon: 3.7174,
+    place: "Ghent",
+    description:
+      "Image-Line, a Belgian company now headquartered in Ghent, released the first FruityLoops in December 1997 as a simple MIDI step sequencer written by Didier \"Gol\" Dambrin. It grew into FL Studio, one of the most popular music-production programs in the world.",
+    links: [
+      { label: "Wikipedia: FL Studio", url: "https://en.wikipedia.org/wiki/FL_Studio" },
+      { label: "Wikipedia: Image-Line", url: "https://en.wikipedia.org/wiki/Image-Line" },
+      { label: "Image-Line: company history", url: "https://www.image-line.com/company-history" }
+    ],
+    tags: ["audio-evolution", "music", "software", "digital audio"],
+    example: false
+  },
+  {
+    id: "brandenburg-mp3",
+    title: "MP3 (MPEG-1 Audio Layer III)",
+    creator: "Karlheinz Brandenburg & the Fraunhofer team",
+    year: 1991,
+    country: "Germany",
+    lat: 49.5897, lon: 11.0078,
+    place: "Erlangen",
+    description:
+      "Developed largely at the Fraunhofer Society in Germany under Karlheinz Brandenburg, who studied and earned his PhD at Erlangen, MP3 shrinks audio by dropping what we are least likely to hear. Layer III was defined in 1991 and the first software encoder arrived in 1994, helping to put music on computers and the internet.",
+    links: [
+      { label: "Wikipedia: MP3", url: "https://en.wikipedia.org/wiki/MP3" },
+      { label: "Wikipedia: Karlheinz Brandenburg", url: "https://en.wikipedia.org/wiki/Karlheinz_Brandenburg" }
+    ],
+    tags: ["audio-evolution", "digital audio", "compression"],
+    example: false
+  },
+  {
+    id: "duda-serum",
+    title: "Serum & Serum 2 wavetable synthesizer",
+    creator: "Steve Duda (Xfer Records)",
+    year: "2014 (Serum 2: 2025)",
+    country: "United States of America",
+    lat: 34.0522, lon: -118.2437,
+    place: "Los Angeles",
+    description:
+      "Los Angeles producer Steve Duda programmed Serum, released in September 2014 on Xfer Records, a wavetable synth with a visual editor that became a staple of electronic music. Serum 2 arrived on March 18, 2025 as a free upgrade for Serum 1 owners, and FM is among its warp modes, a nod to Chowning.",
+    links: [
+      { label: "Wikipedia: Steve Duda", url: "https://en.wikipedia.org/wiki/Steve_Duda" },
+      { label: "Xfer Records: Serum 2", url: "https://xferrecords.com/products/serum-2" },
+      { label: "MusicTech: Serum 2 release", url: "https://musictech.com/news/gear/serum-2-everything-you-need-to-know/" }
+    ],
+    tags: ["audio-evolution", "music", "synthesis", "software"],
+    example: false
+  },
+
   /* ---------- Starter examples (swap these for your own!) ---------- */
   {
     id: "ramanujan-partitions",
