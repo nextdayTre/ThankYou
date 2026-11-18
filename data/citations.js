@@ -147,13 +147,32 @@ window.CITATIONS = [
     lat: 32.0603, lon: 118.7969,
     place: "Nanjing",
     description:
-      "Zu Chongzhi, born in Jiankang (today's Nanjing), pinned pi between 3.1415926 and 3.1415927 and gave the famous fraction 355/113, a record that stood for nearly 900 years. Ramanujan used 355/113 in his 1914 pi paper, the same paper that gave his famous infinite series for 1/π.",
+      "Zu Chongzhi, born in Jiankang (today's Nanjing), pinned pi between 3.1415926 and 3.1415927 and gave the famous fraction 355/113, a record that stood for nearly 900 years. Ramanujan used 355/113 in his 1914 pi paper, the same paper that gave his famous infinite series for 1/π. For another Chinese pi story, see Ming Antu in Beijing.",
     links: [
       { label: "Wikipedia: Zu Chongzhi", url: "https://en.wikipedia.org/wiki/Zu_Chongzhi" },
       { label: "Wikipedia: Milü", url: "https://en.wikipedia.org/wiki/Mil%C3%BC" },
       { label: "Ramanujan's 1914 paper (PDF)", url: "https://ramanujan.sirinudi.org/Volumes/published/ram06.pdf" }
     ],
     tags: ["math", "pi", "ancient"],
+    example: false
+  },
+
+  {
+    id: "ming-antu-infinite-series",
+    title: "Geyuan Milü Jiefa: infinite series & Catalan numbers",
+    creator: "Ming Antu (Minggatu)",
+    year: "c. 1730s–1774",
+    country: "China",
+    lat: 39.9042, lon: 116.4074,
+    place: "Beijing",
+    description:
+      "Working at the Imperial Astronomical Bureau in Beijing, Ming Antu spent about thirty years working out why the sine and pi series that Jesuit Pierre Jartoux brought to China in 1701 were true, then found more series of his own and used what are now called Catalan numbers along the way. There is no direct line to Ramanujan, but it is a lovely parallel in infinite-series thinking (see also Zu Chongzhi's pi).",
+    links: [
+      { label: "Wikipedia: Minggatu (Ming Antu)", url: "https://en.wikipedia.org/wiki/Minggatu" },
+      { label: "Wikipedia: Ming Antu's infinite series expansion", url: "https://en.wikipedia.org/wiki/Ming_Antu%27s_infinite_series_expansion_of_trigonometric_functions" },
+      { label: "Wikipedia: Catalan numbers (history)", url: "https://en.wikipedia.org/wiki/Catalan_number" }
+    ],
+    tags: ["math", "pi", "infinite series", "Catalan numbers"],
     example: false
   },
 
