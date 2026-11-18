@@ -64,6 +64,99 @@ window.CITATIONS = [
     example: false
   },
 
+  /* ---------- The binary thread: Egypt → China → Germany → England ---------- */
+  {
+    id: "egyptian-doubling-halving",
+    title: "Duplation & mediation: Egyptian doubling arithmetic",
+    creator: "Ancient Egyptian scribes (e.g. Ahmes, who copied the Rhind Papyrus)",
+    year: "c. 1550 BC",
+    country: "Egypt",
+    lat: 25.6872, lon: 32.6396,
+    place: "Thebes (Luxor)",
+    description:
+      "Egyptian scribes multiplied by doubling one number again and again (and halving the other) and then adding up just the right doublings. They had no idea of base 2, yet it is essentially binary multiplication, found in the Rhind Mathematical Papyrus. This is the first stop on a binary thread that runs to the I Ching and on to Leibniz.",
+    links: [
+      { label: "Wikipedia: Ancient Egyptian multiplication", url: "https://en.wikipedia.org/wiki/Ancient_Egyptian_multiplication" },
+      { label: "Wikipedia: Rhind Mathematical Papyrus", url: "https://en.wikipedia.org/wiki/Rhind_Mathematical_Papyrus" }
+    ],
+    tags: ["math", "binary-thread", "ancient", "arithmetic"],
+    example: false
+  },
+  {
+    id: "iching-fuxi-hexagram-order",
+    title: "I Ching hexagrams & the Fu Xi (Shao Yong) ordering",
+    creator: "Traditionally attributed to Fu Xi; ordered by Shao Yong",
+    year: "11th century AD",
+    country: "China",
+    lat: 34.6197, lon: 112.4540,
+    place: "Luoyang",
+    description:
+      "The 64 hexagrams of the I Ching are stacks of solid and broken lines, and the scholar Shao Yong, working in Luoyang, arranged them in an order that reads just like counting in binary, though he never meant it as math. Missionary Joachim Bouvet sent that diagram to Leibniz in 1701, closing a loop that began with Egyptian doubling.",
+    links: [
+      { label: "Wikipedia: Shao Yong", url: "https://en.wikipedia.org/wiki/Shao_Yong" },
+      { label: "Wikipedia: Hexagram (I Ching)", url: "https://en.wikipedia.org/wiki/Hexagram_(I_Ching)" },
+      { label: "Wikipedia: Binary number (history)", url: "https://en.wikipedia.org/wiki/Binary_number" }
+    ],
+    tags: ["math", "binary-thread", "binary", "philosophy"],
+    example: false
+  },
+  {
+    id: "leibniz-binary-arithmetic",
+    title: "Binary arithmetic (Explication de l'Arithmétique Binaire)",
+    creator: "Gottfried Wilhelm Leibniz",
+    year: 1703,
+    country: "Germany",
+    lat: 52.3759, lon: 9.7320,
+    place: "Hanover",
+    description:
+      "Leibniz, who worked in Hanover from 1676 until his death, laid out arithmetic using only 0 and 1 and in his 1703 essay recognised the same pattern in the I Ching hexagrams after Joachim Bouvet's letters from China. The next stop on the binary thread after Egypt and China.",
+    links: [
+      { label: "Wikipedia: Gottfried Wilhelm Leibniz", url: "https://en.wikipedia.org/wiki/Gottfried_Wilhelm_Leibniz" },
+      { label: "Wikipedia: Binary number (history)", url: "https://en.wikipedia.org/wiki/Binary_number" },
+      { label: "The 1703 essay (French text, Wikisource)", url: "https://fr.wikisource.org/wiki/Leibniz-en.francais-Gerhardt.Math.1a7.djvu/Num%C3%A9ration.binaire" }
+    ],
+    tags: ["math", "binary-thread", "binary", "computing", "philosophy"],
+    example: false
+  },
+  {
+    id: "lovelace-analytical-engine-notes",
+    title: "Notes on the Analytical Engine (the first published program)",
+    creator: "Ada Lovelace",
+    year: 1843,
+    country: "United Kingdom",
+    lat: 51.5074, lon: -0.1278,
+    place: "London",
+    description:
+      "Ada Lovelace, born in London, added seven long notes to a paper on Babbage's Analytical Engine, including a step-by-step method for computing Bernoulli numbers (often called the first published computer program). She also guessed that such a machine could even compose music. The engine itself counted in decimal, not binary.",
+    links: [
+      { label: "Wikipedia: Ada Lovelace", url: "https://en.wikipedia.org/wiki/Ada_Lovelace" },
+      { label: "Wikipedia: Analytical Engine", url: "https://en.wikipedia.org/wiki/Analytical_Engine" },
+      { label: "Her 1843 Notes (full text)", url: "https://www.fourmilab.ch/babbage/sketch.html" }
+    ],
+    tags: ["computing", "math", "music", "programming"],
+    example: false
+  },
+
+  /* ---------- Pi, from China to Ramanujan ---------- */
+  {
+    id: "zu-chongzhi-milu",
+    title: "Zu's ratio: Milü, 355/113 for pi",
+    creator: "Zu Chongzhi",
+    year: "5th century AD",
+    country: "China",
+    lat: 32.0603, lon: 118.7969,
+    place: "Nanjing",
+    description:
+      "Zu Chongzhi, born in Jiankang (today's Nanjing), pinned pi between 3.1415926 and 3.1415927 and gave the famous fraction 355/113, a record that stood for nearly 900 years. Ramanujan used 355/113 in his 1914 pi paper, the same paper that gave his famous infinite series for 1/π.",
+    links: [
+      { label: "Wikipedia: Zu Chongzhi", url: "https://en.wikipedia.org/wiki/Zu_Chongzhi" },
+      { label: "Wikipedia: Milü", url: "https://en.wikipedia.org/wiki/Mil%C3%BC" },
+      { label: "Ramanujan's 1914 paper (PDF)", url: "https://ramanujan.sirinudi.org/Volumes/published/ram06.pdf" }
+    ],
+    tags: ["math", "pi", "ancient"],
+    example: false
+  },
+
   /* ---------- Starter examples (swap these for your own!) ---------- */
   {
     id: "ramanujan-partitions",
