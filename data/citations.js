@@ -367,6 +367,226 @@ window.CITATIONS = [
     example: false
   },
 
+  /* ---------- Instruments, scales & number systems from around the world ---------- */
+  {
+    id: "flamenco-andalusia",
+    title: "Flamenco & its Phrygian-dominant sound",
+    creator: "Gitano (Romani) and Andalusian communities",
+    year: "Late 18th century",
+    country: "Spain",
+    lat: 36.685, lon: -6.1261,
+    place: "Jerez de la Frontera, Andalusia",
+    description:
+      "Flamenco grew out of southern Spain's folk traditions, shaped especially by the gitano (Romani) community of Andalusia, with Jerez de la Frontera the first place it appears in writing. Its song and guitar often sit in the Phrygian dominant mode, the same sound Arabic music calls hijaz (see the oud and maqam pin in Baghdad), and UNESCO recognised flamenco in 2010.",
+    links: [
+      { label: "Wikipedia: Flamenco", url: "https://en.wikipedia.org/wiki/Flamenco" },
+      { label: "Wikipedia: Phrygian dominant scale", url: "https://en.wikipedia.org/wiki/Phrygian_dominant_scale" }
+    ],
+    tags: ["instruments-and-scales", "music", "guitar", "scales", "tradition"],
+    example: false
+  },
+  {
+    id: "charango-andes",
+    title: "The charango",
+    creator: "Quechua and Aymara peoples of the Andes",
+    year: "Colonial era (c. 1700s)",
+    country: "Bolivia",
+    lat: -19.5836, lon: -65.7531,
+    place: "Potosí (one leading theory)",
+    description:
+      "A small ten-string Andean lute created by Quechua and Aymara musicians after Spanish stringed instruments arrived, traditionally with an armadillo-shell body. Its exact birthplace is debated between Bolivia and Peru, so this pin sits at Potosí, one of the leading theories.",
+    links: [
+      { label: "Wikipedia: Charango", url: "https://en.wikipedia.org/wiki/Charango" }
+    ],
+    tags: ["instruments-and-scales", "music", "strings", "tradition"],
+    example: false
+  },
+  {
+    id: "afro-peruvian-cajon",
+    title: "The Afro-Peruvian cajón",
+    creator: "Afro-Peruvian communities (descendants of enslaved West and Central Africans)",
+    year: "19th century (popular by 1850)",
+    country: "Peru",
+    lat: -12.0464, lon: -77.0428,
+    place: "Lima, coastal Peru",
+    description:
+      "A box-shaped drum played with the hands, developed during the period of slavery in coastal Peru and the most widely used Afro-Peruvian instrument since the late 19th century. In 1977 flamenco guitarist Paco de Lucía brought one to Spain, where it joined flamenco (see the Spain pin).",
+    links: [
+      { label: "Wikipedia: Cajón", url: "https://en.wikipedia.org/wiki/Caj%C3%B3n" },
+      { label: "Wikipedia: Afro-Peruvian music", url: "https://en.wikipedia.org/wiki/Afro-Peruvian_music" }
+    ],
+    tags: ["instruments-and-scales", "music", "percussion", "rhythm", "tradition"],
+    example: false
+  },
+  {
+    id: "berimbau-brazil",
+    title: "The berimbau",
+    creator: "Angolan (Bantu) and Afro-Brazilian communities",
+    year: "19th–20th century in Brazil",
+    country: "Brazil",
+    lat: -12.9777, lon: -38.5016,
+    place: "Salvador, Bahia",
+    description:
+      "A one-string musical bow with a gourd resonator, adapted in Brazil from Angolan bows and played with a stick and a coin or stone to change its tone. In early 20th-century Bahia it became the heart of the rhythm in capoeira.",
+    links: [
+      { label: "Wikipedia: Berimbau", url: "https://en.wikipedia.org/wiki/Berimbau" }
+    ],
+    tags: ["instruments-and-scales", "music", "strings", "rhythm", "tradition"],
+    example: false
+  },
+  {
+    id: "tango-bandoneon",
+    title: "Tango & the bandoneón",
+    creator: "Communities of the Río de la Plata (Argentina and Uruguay)",
+    year: "1880s",
+    country: "Argentina",
+    lat: -34.6037, lon: -58.3816,
+    place: "Buenos Aires",
+    description:
+      "Tango was born in the 1880s in the port neighbourhoods around the Río de la Plata, blending milonga, habanera and candombe, and UNESCO recognised it in 2009 on a joint Argentina–Uruguay proposal. The bandoneón, a button concertina named by German dealer Heinrich Band, is believed to have reached the region around 1870 and became tango's voice.",
+    links: [
+      { label: "Wikipedia: Tango", url: "https://en.wikipedia.org/wiki/Tango" },
+      { label: "Wikipedia: Bandoneón", url: "https://en.wikipedia.org/wiki/Bandone%C3%B3n" }
+    ],
+    tags: ["instruments-and-scales", "music", "tradition", "dance"],
+    example: false
+  },
+  {
+    id: "kingston-dub-king-tubby",
+    title: "Sound-system culture & dub (King Tubby)",
+    creator: "Jamaican sound-system builders and engineers, e.g. King Tubby (Osbourne Ruddock)",
+    year: "Late 1960s–1970s",
+    country: "Jamaica",
+    lat: 17.9714, lon: -76.792,
+    place: "Kingston",
+    description:
+      "In Kingston, sound-system operators built their own huge amplifiers, and electronics repairman Osbourne \"King Tubby\" Ruddock added homemade echo and reverb and treated the mixing desk as an instrument, remixing recordings into dub. He is often cited as the inventor of the remix.",
+    links: [
+      { label: "Wikipedia: King Tubby", url: "https://en.wikipedia.org/wiki/King_Tubby" },
+      { label: "Wikipedia: Dub music", url: "https://en.wikipedia.org/wiki/Dub_music" }
+    ],
+    tags: ["instruments-and-scales", "audio-evolution", "music", "sound design", "mixing"],
+    example: false
+  },
+  {
+    id: "steelpan-trinidad",
+    title: "The steelpan",
+    creator: "Trinidadian pannists (e.g. Winston \"Spree\" Simon, Ellie Mannette)",
+    year: "1930s–1940s",
+    country: "Trinidad and Tobago",
+    lat: 10.6564, lon: -61.4897,
+    place: "Laventille, Port of Spain",
+    description:
+      "The steelpan grew out of Carnival's tamboo bamboo bands: by 1937 players in Laventille were using frying pans, bin lids and oil drums, and later whole drums were tuned into a chromatic instrument. Some pans are tuned in cycles of fourths and fifths, and it became the national instrument of Trinidad and Tobago in 1992.",
+    links: [
+      { label: "Wikipedia: Steelpan", url: "https://en.wikipedia.org/wiki/Steelpan" }
+    ],
+    tags: ["instruments-and-scales", "music", "percussion", "tuning", "tradition"],
+    example: false
+  },
+  {
+    id: "mbira-shona",
+    title: "The mbira",
+    creator: "Shona people of Zimbabwe",
+    year: "Ancient tradition",
+    country: "Zimbabwe",
+    lat: -18.9, lon: 30.3,
+    place: "Zimbabwe (Shona lands)",
+    description:
+      "A family of instruments with metal tines plucked by the thumbs, traditional to the Shona people and central to ceremonies and gatherings. Its music is built from interlocking cross-rhythms, and tunings belong to families rather than to Western scales. UNESCO listed the art of mbira/sansi in 2020.",
+    links: [
+      { label: "Wikipedia: Mbira", url: "https://en.wikipedia.org/wiki/Mbira" }
+    ],
+    tags: ["instruments-and-scales", "music", "rhythm", "tuning", "tradition"],
+    example: false
+  },
+  {
+    id: "yoruba-talking-drum",
+    title: "The talking drum (dùndún)",
+    creator: "Yoruba people of southwestern Nigeria",
+    year: "Traditional",
+    country: "Nigeria",
+    lat: 7.3775, lon: 3.947,
+    place: "Yorubaland (Ibadan)",
+    description:
+      "An hourglass-shaped drum whose pitch changes as the player squeezes its tension cords, so it can imitate the tones of the Yoruba language and seem to speak. Talking drummers can send messages that other drummers relay across long distances.",
+    links: [
+      { label: "Wikipedia: Talking drum", url: "https://en.wikipedia.org/wiki/Talking_drum" },
+      { label: "Wikipedia: Yoruba people", url: "https://en.wikipedia.org/wiki/Yoruba_people" }
+    ],
+    tags: ["instruments-and-scales", "music", "acoustics", "signal", "tradition"],
+    example: false
+  },
+  {
+    id: "gamelan-java-slendro-pelog",
+    title: "Gamelan & the slendro and pelog tunings",
+    creator: "Javanese, Sundanese and Balinese peoples",
+    year: "Traditional (shown at Borobudur, 8th century)",
+    country: "Indonesia",
+    lat: -7.7956, lon: 110.3695,
+    place: "Yogyakarta, Java",
+    description:
+      "Ensembles of tuned metallophones and drums with two tuning systems of their own, five-note slendro and seven-note pelog, which are not Western scales and vary from one gamelan to the next. In Balinese gamelan, paired instruments are tuned slightly apart on purpose so they shimmer with beating. UNESCO inscribed gamelan in 2021.",
+    links: [
+      { label: "Wikipedia: Gamelan", url: "https://en.wikipedia.org/wiki/Gamelan" },
+      { label: "Wikipedia: Slendro", url: "https://en.wikipedia.org/wiki/Slendro" },
+      { label: "Wikipedia: Pelog", url: "https://en.wikipedia.org/wiki/Pelog" }
+    ],
+    tags: ["instruments-and-scales", "music", "tuning", "scales", "acoustics", "tradition"],
+    example: false
+  },
+  {
+    id: "oud-maqam-baghdad",
+    title: "The oud & the maqam system",
+    creator: "Arab and wider Middle Eastern musicians; al-Kindī gave the oud's first known full description",
+    year: "9th century (al-Kindī's description)",
+    country: "Iraq",
+    lat: 33.3152, lon: 44.3661,
+    place: "Baghdad",
+    description:
+      "The oud is a fretless, pear-shaped lute descended from the Persian barbat, and al-Kindī of Baghdad's House of Wisdom wrote its first known complete description in the 9th century. Arabic music's maqam system organises melody into scales built from major, minor, neutral and augmented seconds, and the hijaz maqam is the Phrygian dominant sound heard in flamenco.",
+    links: [
+      { label: "Wikipedia: Oud", url: "https://en.wikipedia.org/wiki/Oud" },
+      { label: "Wikipedia: Arabic maqam", url: "https://en.wikipedia.org/wiki/Arabic_maqam" },
+      { label: "Wikipedia: Al-Kindi", url: "https://en.wikipedia.org/wiki/Al-Kindi" }
+    ],
+    tags: ["instruments-and-scales", "music", "scales", "strings", "tradition"],
+    example: false
+  },
+  {
+    id: "didgeridoo-yidaki",
+    title: "The yidaki (didgeridoo)",
+    creator: "Aboriginal peoples of northern Australia (yidaki: Yolŋu; mako: Bininj)",
+    year: "Ancient tradition (age debated)",
+    country: "Australia",
+    lat: -13.0, lon: 134.5,
+    place: "Arnhem Land, Northern Territory",
+    description:
+      "A long wooden drone instrument, traditionally a termite-hollowed eucalyptus, played with circular breathing so the sound never stops. Known as the yiḏaki among the Yolŋu of northeast Arnhem Land, its irregular bore gives resonances that are not evenly spaced, which helps create its unmistakable voice.",
+    links: [
+      { label: "Wikipedia: Didgeridoo", url: "https://en.wikipedia.org/wiki/Didgeridoo" }
+    ],
+    tags: ["instruments-and-scales", "music", "acoustics", "tradition"],
+    example: false
+  },
+  {
+    id: "maya-zero-base20",
+    title: "Maya numerals: base 20 & the shell zero",
+    creator: "Maya and earlier Mesoamerican peoples",
+    year: "By 36 BC",
+    country: "Mexico",
+    lat: 16.7078, lon: -93.0125,
+    place: "Chiapa de Corzo, Chiapas",
+    description:
+      "Mesoamerican scribes counted in base 20 with a dot for one, a bar for five and a shell for zero, a true place-holder. The earliest Long Count date, 36 BC (though the reading is not certain), is on Stela 2 at Chiapa de Corzo, in an Epi-Olmec style, so the idea may predate the Maya.",
+    links: [
+      { label: "Wikipedia: Maya numerals", url: "https://en.wikipedia.org/wiki/Maya_numerals" },
+      { label: "Wikipedia: Mesoamerican Long Count calendar", url: "https://en.wikipedia.org/wiki/Mesoamerican_Long_Count_calendar" }
+    ],
+    tags: ["math", "number-systems", "zero", "ancient"],
+    example: false
+  },
+
   /* ---------- Starter examples (swap these for your own!) ---------- */
   {
     id: "ramanujan-partitions",
