@@ -605,6 +605,83 @@ window.CITATIONS = [
     example: false
   },
 
+  {
+    id: "al-kindi-oud-melodies",
+    title: "Al-Kindi: the ʿud, ratios & the composition of melodies",
+    creator: "Yaʿqub ibn Ishaq al-Kindi",
+    year: "c. 801–873",
+    country: "Iraq",
+    lat: 33.3152, lon: 44.3661,
+    place: "Baghdad",
+    description:
+      "Born in Kufa and educated in Baghdad, where he worked in the House of Wisdom, al-Kindi is remembered as \"the philosopher of the Arabs\", but he was also the first music theorist of the Arabic-Islamic world whose writing survives. His Risala fi hubr ta'lif al-alhan (Epistle on the Composition of Melodies) ties Greek ideas of harmonic ratio to the ʿud: it describes tuning and fretting by Pythagorean string-length ratios such as 9:8 (a whole tone), 32:27 (a minor third) and 4:3 (a fourth), and names the notes with letters of the Arabic alphabet. Modern analysts read the text as describing a 12-note chromatic scale on the ʿud, and it also describes a fifth string (whether that string was practical or purely theoretical is debated). Caveat: the epistle survives only as a damaged, fragmentary copy, so parts of this picture are scholarly reconstruction.",
+    links: [
+      { label: "Wikipedia: Al-Kindi", url: "https://en.wikipedia.org/wiki/Al-Kindi" },
+      { label: "Stanford Encyclopedia of Philosophy: Al-Kindi", url: "https://plato.stanford.edu/entries/al-kindi/" },
+      { label: "Muslim Heritage: The Muslim Influence on Musical Theory", url: "https://muslimheritage.com/influence-on-musical-theory/" },
+      { label: "Wikipedia: Pythagorean tuning", url: "https://en.wikipedia.org/wiki/Pythagorean_tuning" }
+    ],
+    tags: ["music-and-math", "instruments-and-scales", "islamic-golden-age", "strings", "scales", "ratios"],
+    example: false
+  },
+  {
+    id: "al-farabi-great-book-of-music",
+    title: "Al-Farabi: the Great Book of Music",
+    creator: "Abu Nasr al-Farabi (Alpharabius)",
+    year: "c. 870–950/951",
+    country: "Syria",
+    lat: 33.5138, lon: 36.2765,
+    place: "Damascus",
+    description:
+      "Al-Farabi, later called \"the Second Master\" after Aristotle, spent most of his scholarly life in Baghdad and died in Damascus, where this pin sits so the Baghdad pin isn't crowded (see the oud and maqam entry). His birthplace is uncertain: traditional accounts point to Farab in Central Asia (for example Otrar, in modern Kazakhstan), and historians still debate whether his family was Persian, Turkic or something else. His Kitab al-Musiqi al-Kabir (Great Book of Music) begins with the philosophy and acoustics of music, then covers intervals, melodic and rhythmic modes, and how the scales are produced on instruments such as the ʿud, tunbur, flute, rebec and harp. It builds on the Greek tradition of harmonic ratios and, by his own account, adds a new craft of instruments and composition. Its rhythm chapters were hard going even for him, so he revised his rhythm theory in later books.",
+    links: [
+      { label: "Wikipedia: Al-Farabi", url: "https://en.wikipedia.org/wiki/Al-Farabi" },
+      { label: "Stanford Encyclopedia of Philosophy: Al-Farabi", url: "https://plato.stanford.edu/entries/al-farabi/" },
+      { label: "Encyclopaedia Iranica: Fārābī v. Music", url: "https://www.iranicaonline.org/articles/farabi-v/" },
+      { label: "Wikipedia: Kitab al-Musiqa al-Kabir", url: "https://en.wikipedia.org/wiki/Kitab_al-Musiqa_al-Kabir" }
+    ],
+    tags: ["music-and-math", "instruments-and-scales", "islamic-golden-age", "music theory", "rhythm", "ratios"],
+    example: false
+  },
+  {
+    id: "ziryab-cordoba-oud",
+    title: "Ziryab: the ʿud and the music school of Córdoba",
+    creator: "Abu al-Hasan ʿAli ibn Nafiʿ (Ziryab, \"the Blackbird\")",
+    year: "c. 789–857",
+    country: "Spain",
+    lat: 37.8882, lon: -4.7794,
+    place: "Córdoba",
+    description:
+      "Born around 789, most likely in Baghdad, and trained there by the master Ibrahim al-Mawsili, Ziryab left Baghdad and by about 822 had settled at the court of Abd al-Rahman II in Córdoba. He is traditionally credited with adding a fifth course of strings to the ʿud (al-Kindi's writing also describes a fifth string, so the credit is not simple) and with founding one of the first music schools in Córdoba, open to women as well as men, whose influence lasted for generations. He is regarded as a founder of the Andalusian music traditions of North Africa and a major influence on music in Iberia; later forms such as the nawba are linked to him only loosely. Southern Spain's music has many layers, and he is one of them (see the flamenco pin), though direct lines are hard to prove. Many details come from later chroniclers such as Ibn Hayyan and al-Maqqari.",
+    links: [
+      { label: "Wikipedia: Ziryab", url: "https://en.wikipedia.org/wiki/Ziryab" },
+      { label: "Saudi Aramco World: Flight of the Blackbird", url: "https://archive.aramcoworld.com/issue/200304/flight.of.the.blackbird.htm" },
+      { label: "Muslim Heritage: The Muslim Influence on Musical Theory", url: "https://muslimheritage.com/influence-on-musical-theory/" },
+      { label: "Wikipedia: Oud", url: "https://en.wikipedia.org/wiki/Oud" }
+    ],
+    tags: ["music-and-math", "instruments-and-scales", "islamic-golden-age", "strings", "teaching", "al-andalus"],
+    example: false
+  },
+  {
+    id: "gerbert-aurillac-quadrivium",
+    title: "Gerbert of Aurillac (Pope Sylvester II): the quadrivium & Arabic learning",
+    creator: "Gerbert of Aurillac (Pope Sylvester II)",
+    year: "c. 946–1003",
+    country: "Spain",
+    lat: 41.9301, lon: 2.2549,
+    place: "Vic, Catalonia",
+    description:
+      "Gerbert, a French monk, was taken to Catalonia in 967 by Count Borrell II of Barcelona and studied there until about 970 under Bishop Atto of Vic, probably also drawing on the library of Santa Maria de Ripoll. That was the Christian borderland beside Muslim al-Andalus, where manuscripts from the south and Arabic science were arriving. He did not study inside al-Andalus itself as far as the documents show; tales of study in Córdoba or Seville come mostly from a later legend. At Reims he taught the quadrivium (arithmetic, geometry, music and astronomy) and brought a counting abacus using Hindu-Arabic digits (probably without zero) back into use in Latin Europe. The quadrivium itself is much older than Islam (Pythagoreans and Plato, with the word from Boethius around 500 AD); Arabic learning enriched it rather than creating it. Gerbert became Pope Sylvester II in 999.",
+    links: [
+      { label: "Wikipedia: Pope Sylvester II", url: "https://en.wikipedia.org/wiki/Pope_Sylvester_II" },
+      { label: "Enciclopèdia Catalana: El moviment cultural d'Osona (Gerbert at Vic)", url: "https://www.enciclopedia.cat/catalunya-romanica/el-moviment-cultural-dosona" },
+      { label: "MacTutor History of Mathematics: Gerbert of Aurillac", url: "https://mathshistory.st-andrews.ac.uk/SH/gerbert_sh.pdf" },
+      { label: "Wikipedia: Quadrivium", url: "https://en.wikipedia.org/wiki/Quadrivium" }
+    ],
+    tags: ["music-and-math", "islamic-golden-age", "quadrivium", "numerals", "teaching"],
+    example: false
+  },
+
   /* ---------- Starter examples (swap these for your own!) ---------- */
   {
     id: "ramanujan-partitions",
