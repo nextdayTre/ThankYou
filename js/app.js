@@ -67,33 +67,57 @@
     });
   })();
 
-  /* ---------- Sound (off by default; synthesised, no files) ---------- */
-  var audio = { on: false, ctx: null };
-  function tone(freq, t0, dur, vol, type) {
-    var c = audio.ctx, o = c.createOscillator(), g = c.createGain();
-    o.type = type || 'sine'; o.frequency.value = freq;
-    g.gain.setValueAtTime(0.0001, c.currentTime + t0);
-    g.gain.exponentialRampToValueAtTime(vol, c.currentTime + t0 + 0.012);
-    g.gain.exponentialRampToValueAtTime(0.0001, c.currentTime + t0 + dur);
-    o.connect(g); g.connect(c.destination); o.start(c.currentTime + t0); o.stop(c.currentTime + t0 + dur + 0.05);
+  /* ---------- Sound (off by default; all generated live in js/audio.js — no files) ---------- */
+  var NA = window.NightAudio;
+  var PREF_KEY = 'citationGlobe.audio.v1';
+  var pref = { on: false, music: true, fx: true, vol: 0.5 };
+  try { var saved = JSON.parse(localStorage.getItem(PREF_KEY) || 'null'); if (saved) { pref.on = !!saved.on; pref.music = saved.music !== false; pref.fx = saved.fx !== false; if (typeof saved.vol === 'number') pref.vol = Math.max(0, Math.min(1, saved.vol)); } } catch (e) { /* storage blocked */ }
+  function savePref() { try { localStorage.setItem(PREF_KEY, JSON.stringify(pref)); } catch (e) { /* ignore */ } }
+  function sfx(name) { if (NA && pref.on && pref.fx) NA.sfx(name); }
+  var soundBtn = $('soundBtn'), audioMore = $('audioMore'), audioPanel = $('audioPanel'), soundHint = $('soundHint');
+  var audioStarted = false;
+  function hideSoundHint() { if (soundHint) soundHint.classList.add('gone'); }
+  function applyAudio() {
+    if (!NA || !NA.supported) return;
+    NA.setVolume(pref.vol); NA.setFx(pref.on && pref.fx); NA.setMusic(pref.on && pref.music);
   }
-  var SFX = {
-    hover: function () { tone(1318, 0, 0.09, 0.035, 'sine'); },
-    open: function () { tone(784, 0, 0.18, 0.07); tone(1047, 0.07, 0.2, 0.07); tone(1568, 0.14, 0.32, 0.06); },
-    close: function () { tone(1047, 0, 0.14, 0.06); tone(698, 0.07, 0.22, 0.06); },
-    nope: function () { tone(330, 0, 0.16, 0.05, 'triangle'); },
-    whoosh: function () { tone(520, 0, 0.35, 0.03, 'sine'); tone(780, 0.1, 0.35, 0.03, 'sine'); }
-  };
-  function sfx(name) { if (audio.on && audio.ctx) { try { SFX[name](); } catch (e) { /* ignore */ } } }
-  $('soundBtn').addEventListener('click', function () {
-    audio.on = !audio.on;
-    if (audio.on && !audio.ctx) { var AC = window.AudioContext || window.webkitAudioContext; if (AC) audio.ctx = new AC(); }
-    if (audio.ctx && audio.ctx.state === 'suspended') audio.ctx.resume();
-    this.setAttribute('aria-pressed', String(audio.on));
-    this.setAttribute('aria-label', audio.on ? 'Turn UI sounds off' : 'Turn UI sounds on');
-    this.title = 'UI sounds (' + (audio.on ? 'on' : 'off') + ')';
-    sfx('open');
+  function paintAudioUI() {
+    soundBtn.setAttribute('aria-pressed', String(pref.on));
+    soundBtn.setAttribute('aria-label', pref.on ? 'Turn night music and sounds off' : 'Turn night music and sounds on');
+    soundBtn.title = pref.on ? 'Night music & sounds (on)' : 'Night music & sounds (off)';
+    audioMore.hidden = !pref.on; if (!pref.on) setPanel(false);
+    $('optMusic').checked = pref.music; $('optFx').checked = pref.fx; $('optVol').value = Math.round(pref.vol * 100);
+  }
+  function setPanel(open) { audioPanel.hidden = !open; audioMore.setAttribute('aria-expanded', String(open)); }
+  function startAudio() { if (!NA || !NA.supported) return false; audioStarted = true; return NA.start(); }
+  if (!NA || !NA.supported) { soundBtn.hidden = true; hideSoundHint(); }
+  soundBtn.addEventListener('click', function () {
+    hideSoundHint();
+    pref.on = !pref.on;
+    if (pref.on && !startAudio()) pref.on = false;
+    applyAudio(); paintAudioUI(); savePref();
+    if (pref.on) setTimeout(function () { sfx('open'); }, 60);
   });
+  audioMore.addEventListener('click', function () { setPanel(audioPanel.hidden); });
+  $('optMusic').addEventListener('change', function () { pref.music = this.checked; applyAudio(); savePref(); });
+  $('optFx').addEventListener('change', function () { pref.fx = this.checked; applyAudio(); savePref(); if (pref.fx) sfx('open'); });
+  $('optVol').addEventListener('input', function () { pref.vol = this.value / 100; if (NA) NA.setVolume(pref.vol); });
+  $('optVol').addEventListener('change', function () { savePref(); });
+  document.addEventListener('keydown', function (e) { if (e.key === 'Escape' && !audioPanel.hidden) setPanel(false); });
+  document.addEventListener('pointerdown', function (e) { if (!audioPanel.hidden && !audioPanel.contains(e.target) && e.target !== audioMore && !audioMore.contains(e.target)) setPanel(false); });
+  // Browsers block autoplay: if you turned sound on last visit, it begins at your first tap/click/key.
+  if (pref.on && NA && NA.supported) {
+    var resumeOnGesture = function () {
+      document.removeEventListener('pointerdown', resumeOnGesture, true); document.removeEventListener('keydown', resumeOnGesture, true);
+      if (pref.on && !audioStarted && startAudio()) applyAudio();
+    };
+    document.addEventListener('pointerdown', resumeOnGesture, true); document.addEventListener('keydown', resumeOnGesture, true);
+  } else if (soundHint && NA && NA.supported) {
+    setTimeout(function () { soundHint.classList.remove('gone'); }, 2500);
+    setTimeout(hideSoundHint, 22000);
+  }
+  paintAudioUI();
+  document.addEventListener('visibilitychange', function () { if (!NA) return; if (document.hidden) NA.suspend(); else if (pref.on) NA.resume(); });
 
   /* ---------- Starfield ---------- */
   (function stars() {
@@ -212,6 +236,22 @@
   });
   controls.addEventListener('end', function () { scheduleResume(5000); });
 
+  // Spin speed -> swoosh. Measured as the angle the camera moves around the globe per second
+  // (drag, fling inertia, fly-to). Gentle auto-rotate is far below the threshold, so it stays silent.
+  var lastDir = null, lastDirT = 0, spinDecay = null;
+  function cameraDir() { var p = world.camera().position, l = Math.sqrt(p.x * p.x + p.y * p.y + p.z * p.z) || 1; return [p.x / l, p.y / l, p.z / l]; }
+  controls.addEventListener('change', function () {
+    if (!NA || !pref.on || !pref.fx) { lastDir = null; return; }
+    var now = performance.now(), d = cameraDir();
+    if (lastDir && now - lastDirT > 4) {
+      var dot = Math.max(-1, Math.min(1, d[0] * lastDir[0] + d[1] * lastDir[1] + d[2] * lastDir[2]));
+      var deg = Math.acos(dot) * 180 / Math.PI / ((now - lastDirT) / 1000);
+      NA.spin(deg); lastDir = d; lastDirT = now;
+    } else if (!lastDir) { lastDir = d; lastDirT = now; }
+    clearTimeout(spinDecay);
+    spinDecay = setTimeout(function () { NA.spin(0); lastDir = null; }, 120);   // no movement -> let the swoosh fade
+  });
+
   // Responsive sizing
   function resize() { world.width(window.innerWidth).height(window.innerHeight); }
   window.addEventListener('resize', resize); resize();
@@ -318,7 +358,6 @@
   document.addEventListener('keydown', function (e) { if (e.key === 'Escape') closePanel(); });
 
   function flyToEntry(e, openIt) {
-    sfx('whoosh');
     interactedHide();
     var m = markerFor(e);
     if (openIt) openCountry(e._country, e.id, false, m);

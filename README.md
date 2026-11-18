@@ -55,7 +55,8 @@ Common aliases like `USA`, `UK`, `Czech Republic`, `Turkey` also work. If a name
 ```
 index.html            page shell
 css/style.css         Wii-style UI (fonts, panel, banner, markers)
-js/app.js             globe, interaction, panel, search, sounds
+js/app.js             globe, interaction, panel, search, sound controls
+js/audio.js           generated night music, swoosh and chimes (Web Audio, no files)
 data/citations.js     <-- YOUR DATA (and page text)
 data/countries.js     country borders (generated; rarely edited)
 assets/earth-wii.jpg  stylised earth texture (derived from NASA Blue Marble)
@@ -65,7 +66,16 @@ vendor/               globe.gl 2.46.2 (bundles three.js r187), licences
 tools/                scripts used to generate the texture + borders (optional)
 ```
 
-UI sounds are synthesised in the browser and are **off by default**; the speaker button (bottom-right) turns them on.
+### Night music & sound effects
+
+Everything you hear is **generated live in the browser with the Web Audio API**: no audio files, no samples, nothing copied from any game.
+
+- **Night music**: a slow, warm pad in D major (detuned sine/triangle voices through a low-pass filter and a long generated reverb), occasional soft pentatonic bell chimes, and a faint filtered-noise "night air".
+- **Swoosh**: filtered noise that follows how fast you spin the globe. Faster spins are a little louder and brighter, and it fades out with the globe's inertia. It is smoothed and capped so it stays gentle.
+- **Chimes**: soft bell sounds when a panel opens/closes or you fly to a place.
+- **Controls**: the speaker button (bottom-right) turns music + effects on/off. When on, the small sliders button next to it opens a panel with separate **Night music** and **Swoosh & chimes** switches and a **Volume** slider (default is low).
+- **Off by default.** Browsers block autoplay, so audio only starts after you click the speaker. Your choices are remembered in `localStorage` (`citationGlobe.audio.v1`); if you left it on, it resumes at your first tap or key press on the next visit.
+- To change the mood, edit `CHORDS`, `PENTA` and the levels at the top of `js/audio.js`.
 Auto-rotation pauses while you interact or a panel is open and respects `prefers-reduced-motion`.
 
 ## Credits & licences
@@ -74,4 +84,4 @@ Auto-rotation pauses while you interact or a panel is open and respects `prefers
 - Country borders: Natural Earth (public domain) via world-atlas 2.0.2 (ISC).
 - globe.gl & three-globe by Vasco Asturiano (MIT); three.js (MIT) — licences in `vendor/`.
 - Font: Nunito (SIL Open Font License 1.1).
-- Not affiliated with Nintendo. Inspired by the look of the Forecast Channel globe.
+- **Inspired by Nintendo's Wii Forecast Channel** (Kyoto, Japan, December 2006). Thank you, Nintendo & Japan. It is credited on the globe (Japan → "Forecast Channel (Wii) globe") and in the footer. This is an independent fan tribute: no Nintendo assets or audio are used, and it is not affiliated with Nintendo.

@@ -587,6 +587,24 @@ window.CITATIONS = [
     example: false
   },
 
+  {
+    id: "forecast-channel-wii-globe",
+    title: "Forecast Channel (Wii) globe",
+    creator: "Nintendo",
+    year: 2006,
+    country: "Japan",
+    lat: 34.9667, lon: 135.7500,
+    place: "Kyoto",
+    description:
+      "Thank you, Nintendo and Japan. The Wii's Forecast Channel, first available on December 19, 2006 from the Kyoto-based company, showed a friendly 3D Earth (using NASA's Blue Marble imagery, with weather from Japan's Weathernews) that you could spin and zoom into, with a star map behind it when fully zoomed out. That globe is the direct inspiration for this whole site. With respect and gratitude: this project is a fan tribute, uses no Nintendo assets or audio, and is not affiliated with Nintendo.",
+    links: [
+      { label: "Wikipedia: Wii system software (Forecast Channel)", url: "https://en.wikipedia.org/wiki/Wii_system_software#Forecast_Channel" },
+      { label: "Wikipedia: Nintendo", url: "https://en.wikipedia.org/wiki/Nintendo" }
+    ],
+    tags: ["inspiration-for-this-site", "globe", "weather", "video games"],
+    example: false
+  },
+
   /* ---------- Starter examples (swap these for your own!) ---------- */
   {
     id: "ramanujan-partitions",
