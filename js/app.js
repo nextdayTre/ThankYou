@@ -243,7 +243,7 @@
     })
     .onGlobeClick(function () { if (panelOpen) closePanel(); })
     .ringsData([])
-    .ringLat('lat').ringLng('lng').ringAltitude(0.004)
+    .ringLat('lat').ringLng('lng').ringAltitude(0.021)
     .ringResolution(36).ringMaxRadius(2.4).ringPropagationSpeed(1.35).ringRepeatPeriod(1800)
     .ringColor(function (m) {
       return m === activeMarker
@@ -266,9 +266,19 @@
       d.addEventListener('mouseenter', function () { sfx('hover'); });
       m._el = d; m._lbl = lbl; return d;
     })
-    .htmlElementVisibilityModifier(function (d, vis) { d.classList.toggle('hidden', !vis); });
+    .htmlElementVisibilityModifier(function (d, vis) {
+      var wasHidden = d.classList.contains('hidden');
+      d.classList.toggle('hidden', !vis);
+      if (vis && wasHidden && d.classList.contains('in-country')) requestAnimationFrame(layoutCountryLabels);
+    });
 
   var LABEL_SLOTS = ['', 'lbl-left', 'lbl-down', 'lbl-up'];
+  var labelLayoutT = null;
+  function scheduleLabelLayout(delay) {
+    if (!selectedCountry) return;
+    clearTimeout(labelLayoutT);
+    labelLayoutT = setTimeout(layoutCountryLabels, delay == null ? 90 : delay);
+  }
   function layoutCountryLabels() {
     if (!selectedCountry) return;
     var activeList = [];
@@ -281,10 +291,7 @@
       }
       if (!m._el.classList.contains('hidden')) activeList.push(m);
     }
-    if (activeList.length < 2) {
-      if (activeList.length === 1) activeList[0]._el.classList.remove('lbl-left', 'lbl-up', 'lbl-down');
-      return;
-    }
+    if (!activeList.length) return;
     // Place active marker first, then northernmost to southernmost, choosing the first non-overlapping slot.
     activeList.sort(function (a, b) {
       if (a === activeMarker) return -1;
@@ -293,11 +300,16 @@
     });
     var placed = [];
     var pad = 4;
+    if (panelOpen && panel && !panel.hidden) {
+      var panR = panel.getBoundingClientRect();
+      if (panR.width > 0 && panR.height > 0) placed.push({ l: panR.left - 8, r: panR.right + 8, t: panR.top - 8, b: panR.bottom + 8 });
+    }
     // Reserve the 18x18 pins first so labels never cover another city's dot.
-    activeList.forEach(function (m) {
+    var pinBoxes = activeList.map(function (m) {
       var pr = m._el.getBoundingClientRect();
-      placed.push({ l: pr.left - 2, r: pr.right + 2, t: pr.top - 2, b: pr.bottom + 2 });
+      return { m: m, l: pr.left - 2, r: pr.right + 2, t: pr.top - 2, b: pr.bottom + 2 };
     });
+    var vw = window.innerWidth, vh = window.innerHeight;
     activeList.forEach(function (m) {
       var d = m._el, chosen = '', chosenBox = null;
       for (var s = 0; s < LABEL_SLOTS.length; s++) {
@@ -306,10 +318,19 @@
         if (slot) d.classList.add(slot);
         var r = m._lbl.getBoundingClientRect();
         var box = { l: r.left - pad, r: r.right + pad, t: r.top - pad, b: r.bottom + pad };
-        var collides = false;
-        for (var p = 0; p < placed.length; p++) {
-          var q = placed[p];
-          if (box.l < q.r && box.r > q.l && box.t < q.b && box.b > q.t) { collides = true; break; }
+        var collides = box.l < 6 || box.r > vw - 6 || box.t < 6 || box.b > vh - 6;
+        if (!collides) {
+          for (var p = 0; p < placed.length; p++) {
+            var q = placed[p];
+            if (box.l < q.r && box.r > q.l && box.t < q.b && box.b > q.t) { collides = true; break; }
+          }
+        }
+        if (!collides) {
+          for (var k = 0; k < pinBoxes.length; k++) {
+            var pb = pinBoxes[k];
+            if (pb.m === m) continue;
+            if (box.l < pb.r && box.r > pb.l && box.t < pb.b && box.b > pb.t) { collides = true; break; }
+          }
         }
         if (!collides) { chosen = slot; chosenBox = box; break; }
       }
@@ -380,6 +401,7 @@
   function cameraDir() { var p = world.camera().position, l = Math.sqrt(p.x * p.x + p.y * p.y + p.z * p.z) || 1; return [p.x / l, p.y / l, p.z / l]; }
   controls.addEventListener('change', function () {
     updateLights();
+    scheduleLabelLayout(90);
     if (!NA || !pref.on || !pref.fx) { lastDir = null; return; }
     var now = performance.now(), d = cameraDir();
     if (lastDir && now - lastDirT > 4) {
@@ -392,7 +414,7 @@
   });
 
   // Responsive sizing
-  function resize() { world.width(window.innerWidth).height(window.innerHeight); }
+  function resize() { world.width(window.innerWidth).height(window.innerHeight); scheduleLabelLayout(100); }
   window.addEventListener('resize', resize); resize();
 
   function makeStarTexture(Tex, rgb) {
@@ -612,7 +634,8 @@
   }
   function showPanel() {
     panel.hidden = false; panel.setAttribute('aria-hidden', 'false');
-    requestAnimationFrame(function () { requestAnimationFrame(function () { panel.classList.add('open'); }); });
+    requestAnimationFrame(function () { requestAnimationFrame(function () { panel.classList.add('open'); layoutCountryLabels(); }); });
+    setTimeout(layoutCountryLabels, 360);
     panelOpen = true; controls.autoRotate = false; clearTimeout(resumeTimer);
   }
   function openCountry(country, focusId, fly, marker) {

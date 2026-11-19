@@ -681,6 +681,23 @@ window.CITATIONS = [
     tags: ["music-and-math", "islamic-golden-age", "quadrivium", "numerals", "teaching"],
     example: false
   },
+  {
+    id: "andre-3000-hey-ya",
+    title: "\"Hey Ya!\" (Outkast)",
+    creator: "André 3000",
+    year: 2003,
+    country: "Antarctica",
+    lat: -89.2, lon: -84.388,
+    place: "South Pole",
+    description:
+      "Written, produced, and performed by Atlanta's André 3000 on Speakerboxxx/The Love Below — a joyful pop classic with a legendary call-and-response, stationed down at the South Pole for obvious reasons.",
+    links: [
+      { label: "Wikipedia: Hey Ya!", url: "https://en.wikipedia.org/wiki/Hey_Ya!" },
+      { label: "Wikipedia: André 3000", url: "https://en.wikipedia.org/wiki/Andr%C3%A9_3000" }
+    ],
+    tags: ["music", "pop", "rhythm", "outkast"],
+    example: false
+  },
 
   /* ---------- Starter examples (swap these for your own!) ---------- */
   {

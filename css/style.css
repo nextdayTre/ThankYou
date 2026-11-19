@@ -105,7 +105,8 @@ button,input{font-family:inherit}
 .marker.in-country:not(.hidden) .lbl,.marker:hover:not(.hidden) .lbl,.marker.active:not(.hidden) .lbl{opacity:1;transform:translateY(-50%) scale(1)}
 .marker.lbl-up.in-country:not(.hidden) .lbl,.marker.lbl-up:hover:not(.hidden) .lbl,.marker.lbl-up.active:not(.hidden) .lbl,
 .marker.lbl-down.in-country:not(.hidden) .lbl,.marker.lbl-down:hover:not(.hidden) .lbl,.marker.lbl-down.active:not(.hidden) .lbl{transform:translate(-50%,0) scale(1)}
-.marker:hover .pin i,.marker.active .pin i{transform:scale(1.28);box-shadow:0 0 12px 4px rgba(255,255,255,.92),0 0 24px 8px rgba(255,214,40,.65)}
+.marker:hover .pin i,.marker.active .pin i{transform:scale(1.28);box-shadow:0 0 0 1.5px rgba(8,22,48,.85),0 0 12px 4px rgba(255,255,255,.92),0 0 24px 8px rgba(255,214,40,.65)}
+.marker.active .pin b{border-width:2px;border-color:rgba(255,220,65,.95);box-shadow:0 0 5px rgba(6,16,38,.55)}
 .marker:hover .lbl,.marker.active .lbl{color:var(--yellow);border-color:rgba(255,231,77,.85);background:rgba(10,26,56,.9)}
 
 /* ---------- Misc UI ---------- */
