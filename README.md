@@ -59,8 +59,11 @@ js/app.js             globe, interaction, panel, search, sound controls
 js/audio.js           generated night music, swoosh and chimes (Web Audio, no files)
 data/citations.js     <-- YOUR DATA (and page text)
 data/countries.js     country borders (generated; rarely edited)
-assets/earth-wii.jpg  stylised earth texture (derived from NASA Blue Marble)
-assets/ocean-mask.png ocean-only specular map for the glossy sea
+assets/earth-day.webp       8K natural earth texture (NASA Blue Marble via Solar System Scope, CC BY 4.0)
+assets/earth-night.webp     8K city lights texture (NASA Black Marble via Solar System Scope, CC BY 4.0)
+assets/earth-clouds.webp    4K cloud layer alpha map (Solar System Scope, CC BY 4.0)
+assets/earth-normal.webp    4K terrain normal map (Solar System Scope, CC BY 4.0)
+assets/earth-specular.webp  4K ocean specular mask (Solar System Scope, CC BY 4.0)
 assets/fonts/         Nunito (rounded sans, SIL OFL)
 vendor/               globe.gl 2.46.2 (bundles three.js r187), licences
 tools/                scripts used to generate the texture + borders (optional)
@@ -80,7 +83,7 @@ Auto-rotation pauses while you interact or a panel is open and respects `prefers
 
 ## Credits & licences
 
-- Imagery: NASA Blue Marble (public domain), via the three-globe example texture, re-coloured here for a Wii-like look.
+- Imagery: NASA Blue Marble & Black Marble via [Solar System Scope](https://www.solarsystemscope.com/textures/) (CC BY 4.0).
 - Country borders: Natural Earth (public domain) via world-atlas 2.0.2 (ISC).
 - globe.gl & three-globe by Vasco Asturiano (MIT); three.js (MIT) — licences in `vendor/`.
 - Font: Nunito (SIL Open Font License 1.1).
