@@ -183,7 +183,10 @@
 
   /* ---------- State ---------- */
   var hoverPoly = null, selectedCountry = null, activeMarker = null, panelOpen = false, resumeTimer = null, interacted = false;
-  var isDragging = false, isFlying = false, flyTimer = null;
+  var isDragging = false, isFlying = false, flyTimer = null, lastMarkerClickAt = 0;
+  function isMarkerClick(ev) {
+    return (performance.now() - lastMarkerClickAt < 250) || !!(ev && ev.target && ev.target.closest && ev.target.closest('.marker'));
+  }
   var ALT = { base: 0.0012, hover: 0.011, selected: 0.018 };
   function beginFly(ms) {
     clearTimeout(flyTimer);
@@ -218,6 +221,7 @@
     .globeImageUrl('assets/earth-day.webp')
     .globeCurvatureResolution(2)
     .showAtmosphere(true).atmosphereColor('#3eb8ff').atmosphereAltitude(0.18)
+    .pointerEventsFilter(function (obj) { return obj && obj.__globeObjType !== 'particles'; })
     .polygonsData(geo)
     .polygonCapColor(capColor)
     .polygonSideColor(function () { return 'rgba(255,255,255,0.05)'; })
@@ -237,11 +241,15 @@
       refreshPolys();
     })
     .onPolygonClick(function (f, ev, coords) {
+      if (isMarkerClick(ev)) return;
       var list = byCountry[f.properties.name];
       if (!list) { toast('No inspirations in ' + f.properties.name + ' yet… maybe soon!'); sfx('nope'); return; }
       openCountry(f.properties.name, null, true);
     })
-    .onGlobeClick(function () { if (panelOpen) closePanel(); })
+    .onGlobeClick(function (coords, ev) {
+      if (isMarkerClick(ev)) return;
+      if (panelOpen) closePanel();
+    })
     .ringsData([])
     .ringLat('lat').ringLng('lng').ringAltitude(0.021)
     .ringResolution(36).ringMaxRadius(2.4).ringPropagationSpeed(1.35).ringRepeatPeriod(1800)
@@ -262,7 +270,11 @@
       var lbl = el('span', 'lbl', m.place);
       if (m.entries.length > 1) lbl.appendChild(el('small', null, String(m.entries.length)));
       d.appendChild(pin); d.appendChild(lbl);
-      d.addEventListener('click', function (e) { e.stopPropagation(); openCountry(m.country, m.entries[0].id, true, m); });
+      d.addEventListener('click', function (e) {
+        e.stopPropagation();
+        lastMarkerClickAt = performance.now();
+        openCountry(m.country, m.entries[0].id, true, m);
+      });
       d.addEventListener('mouseenter', function () { sfx('hover'); });
       m._el = d; m._lbl = lbl; return d;
     })
@@ -533,6 +545,7 @@
       cloudMesh = new globeObj.constructor(globeObj.geometry, cloudMat);
       cloudMesh.scale.setScalar(1.007);
       cloudMesh.renderOrder = 1;
+      cloudMesh.raycast = function () {};
       globeObj.add(cloudMesh);
       if (!reduceMotion) {
         var lastT = performance.now();
