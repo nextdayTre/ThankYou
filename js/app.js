@@ -119,56 +119,6 @@
   paintAudioUI();
   document.addEventListener('visibilitychange', function () { if (!NA) return; if (document.hidden) NA.suspend(); else if (pref.on) NA.resume(); });
 
-  /* ---------- Milky Way & faint dust backdrop (drawn once per resize; 3D stars live in WebGL) ---------- */
-  (function stars() {
-    var cv = $('stars'), cx = cv.getContext('2d'), dpr = Math.min(window.devicePixelRatio || 1, 2), resizeT;
-    function drawOnce() {
-      var W = window.innerWidth, H = window.innerHeight, diag = Math.hypot(W, H);
-      cv.width = W * dpr; cv.height = H * dpr; cx.setTransform(dpr, 0, 0, dpr, 0, 0);
-      cx.clearRect(0, 0, W, H);
-      // Diagonal Milky Way glow (top-left to bottom-right)
-      cx.save();
-      cx.translate(W * 0.5, H * 0.5);
-      cx.rotate(0.58);
-      var band = cx.createLinearGradient(0, -diag * 0.24, 0, diag * 0.24);
-      band.addColorStop(0, 'rgba(30,70,145,0)');
-      band.addColorStop(0.32, 'rgba(36,88,175,0.08)');
-      band.addColorStop(0.5, 'rgba(65,130,225,0.13)');
-      band.addColorStop(0.68, 'rgba(36,88,175,0.08)');
-      band.addColorStop(1, 'rgba(30,70,145,0)');
-      cx.fillStyle = band;
-      cx.fillRect(-diag * 0.7, -diag * 0.24, diag * 1.4, diag * 0.48);
-      // Soft nebula knots along the galactic plane
-      for (var k = 0; k < 14; k++) {
-        var kx = (Math.random() - 0.5) * diag * 0.95, ky = (Math.random() - 0.5) * diag * 0.14;
-        var kr = diag * (0.06 + Math.random() * 0.1);
-        var kg = cx.createRadialGradient(kx, ky, 0, kx, ky, kr);
-        kg.addColorStop(0, 'rgba(72,148,245,0.085)');
-        kg.addColorStop(1, 'rgba(30,70,145,0)');
-        cx.fillStyle = kg; cx.beginPath(); cx.arc(kx, ky, kr, 0, 6.2832); cx.fill();
-      }
-      // Fine faint dust stars concentrated near the Milky Way band
-      var dustN = Math.round(W * H / 4500);
-      for (var j = 0; j < dustN; j++) {
-        var dx = (Math.random() - 0.5) * diag * 1.1;
-        var dy = (Math.random() + Math.random() - 1) * diag * 0.18;
-        var dr = Math.random() * 0.7 + 0.2;
-        cx.fillStyle = Math.random() < 0.35 ? 'rgba(175,215,255,0.34)' : 'rgba(255,255,255,0.24)';
-        cx.beginPath(); cx.arc(dx, dy, dr, 0, 6.2832); cx.fill();
-      }
-      cx.restore();
-      // Background field dust
-      var n = Math.round(W * H / 11000);
-      for (var i = 0; i < n; i++) {
-        var x = Math.random() * W, y = Math.random() * H, r = Math.random() * 0.75 + 0.2;
-        cx.fillStyle = Math.random() < 0.25 ? 'rgba(175,212,255,0.26)' : 'rgba(255,255,255,0.20)';
-        cx.beginPath(); cx.arc(x, y, r, 0, 6.2832); cx.fill();
-      }
-    }
-    window.addEventListener('resize', function () { clearTimeout(resizeT); resizeT = setTimeout(drawOnce, 120); });
-    drawOnce();
-  })();
-
   /* ---------- Helpers ---------- */
   function el(tag, cls, text) { var n = document.createElement(tag); if (cls) n.className = cls; if (text != null) n.textContent = text; return n; }
   function safeUrl(u) { return /^https?:\/\//i.test(u) ? u : '#'; }
@@ -203,30 +153,94 @@
   } catch (err) { console.error(err); fatal('Your browser could not start WebGL.'); return; }
 
   function hasEntries(f) { return !!byCountry[f.properties.name]; }
+  function ringSpan(ring) {
+    var minX = 180, maxX = -180, minY = 90, maxY = -90;
+    for (var i = 0; i < ring.length; i++) {
+      var x = ring[i][0], y = ring[i][1];
+      if (x < minX) minX = x; if (x > maxX) maxX = x;
+      if (y < minY) minY = y; if (y > maxY) maxY = y;
+    }
+    return { minX: minX, maxX: maxX, minY: minY, maxY: maxY, span: Math.max(maxX - minX, maxY - minY) };
+  }
+  // Precompute country bounding boxes for instant empty-country click lookup, and filter activeGeo for fast WebGL caps.
+  var emptyGeo = [], activeGeo = [];
+  geo.forEach(function (f) {
+    var coords = f.geometry.coordinates;
+    var fMinX = 180, fMaxX = -180, fMinY = 90, fMaxY = -90;
+    var partBboxes = [];
+    coords.forEach(function (poly) {
+      var bb = ringSpan(poly[0]);
+      partBboxes.push(bb);
+      if (bb.minX < fMinX) fMinX = bb.minX; if (bb.maxX > fMaxX) fMaxX = bb.maxX;
+      if (bb.minY < fMinY) fMinY = bb.minY; if (bb.maxY > fMaxY) fMaxY = bb.maxY;
+    });
+    f._bbox = { minX: fMinX, maxX: fMaxX, minY: fMinY, maxY: fMaxY };
+    f._partBboxes = partBboxes;
+    if (!hasEntries(f)) { emptyGeo.push(f); return; }
+    if (coords.length <= 6) { activeGeo.push(f); return; }
+    var kept = [];
+    var bestIdx = 0, bestSpan = -1;
+    for (var i = 0; i < coords.length; i++) {
+      var sp = partBboxes[i].span;
+      if (sp > bestSpan) { bestSpan = sp; bestIdx = i; }
+      if (sp >= 0.8) kept.push(coords[i]);
+    }
+    if (!kept.length) kept.push(coords[bestIdx]);
+    activeGeo.push({ type: 'Feature', id: f.id, properties: f.properties, geometry: { type: 'MultiPolygon', coordinates: kept } });
+  });
+
+  function pointInRing(x, y, ring) {
+    var inside = false;
+    for (var i = 0, j = ring.length - 1; i < ring.length; j = i++) {
+      var xi = ring[i][0], yi = ring[i][1], xj = ring[j][0], yj = ring[j][1];
+      if ((yi > y) !== (yj > y) && x < (xj - xi) * (y - yi) / (yj - yi) + xi) inside = !inside;
+    }
+    return inside;
+  }
+  function countryAt(lat, lng) {
+    for (var i = 0; i < emptyGeo.length; i++) {
+      var f = emptyGeo[i], b = f._bbox;
+      if (lng < b.minX || lng > b.maxX || lat < b.minY || lat > b.maxY) continue;
+      var coords = f.geometry.coordinates, pb = f._partBboxes;
+      for (var p = 0; p < coords.length; p++) {
+        var pbb = pb[p];
+        if (lng < pbb.minX || lng > pbb.maxX || lat < pbb.minY || lat > pbb.maxY) continue;
+        if (pointInRing(lng, lat, coords[p][0])) {
+          var inHole = false;
+          for (var h = 1; h < coords[p].length; h++) if (pointInRing(lng, lat, coords[p][h])) { inHole = true; break; }
+          if (!inHole) return f.properties.name;
+        }
+      }
+    }
+    return null;
+  }
+
   function capColor(f) {
-    var n = f.properties.name, has = hasEntries(f);
+    var n = f.properties.name;
     if (n === selectedCountry) return 'rgba(255,220,95,0.32)';
-    if (f === hoverPoly) return has ? 'rgba(255,228,110,0.26)' : 'rgba(130,200,255,0.16)';
-    return has ? 'rgba(255,215,90,0.08)' : 'rgba(120,175,255,0.003)';
+    if (f === hoverPoly) return 'rgba(255,228,110,0.26)';
+    return 'rgba(255,215,90,0.08)';
   }
   function strokeColor(f) {
-    if (f.properties.name === selectedCountry) return 'rgba(255,238,145,0.88)';
-    return hasEntries(f) ? 'rgba(255,228,130,0.48)' : 'rgba(135,190,255,0.14)';
+    if (f.properties.name === selectedCountry) return 'rgba(255,238,145,0.92)';
+    if (f === hoverPoly) return 'rgba(255,238,145,0.72)';
+    return null;
   }
   function altitude(f) { return f.properties.name === selectedCountry ? ALT.selected : (f === hoverPoly ? ALT.hover : ALT.base); }
-  function refreshPolys() { world.polygonCapColor(capColor).polygonAltitude(altitude); }
+  function refreshPolys() { world.polygonCapColor(capColor).polygonStrokeColor(strokeColor).polygonAltitude(altitude); }
 
   world
     .backgroundColor('rgba(0,0,0,0)')
     .globeImageUrl('assets/earth-day.webp')
     .globeCurvatureResolution(2)
-    .showAtmosphere(true).atmosphereColor('#3eb8ff').atmosphereAltitude(0.18)
+    .showAtmosphere(true).atmosphereColor('#38b2ff').atmosphereAltitude(0.11)
     .pointerEventsFilter(function (obj) { return obj && obj.__globeObjType !== 'particles'; })
-    .polygonsData(geo)
+    .polygonsData(activeGeo)
     .polygonCapColor(capColor)
-    .polygonSideColor(function () { return 'rgba(255,255,255,0.05)'; })
+    .polygonSideColor(null)
     .polygonStrokeColor(strokeColor)
     .polygonAltitude(altitude)
+    .polygonCapCurvatureResolution(8)
     .polygonsTransitionDuration(180)
     .polygonLabel(function (f) {
       var list = byCountry[f.properties.name];
@@ -248,8 +262,15 @@
     })
     .onGlobeClick(function (coords, ev) {
       if (isMarkerClick(ev)) return;
+      if (coords) {
+        var emptyName = countryAt(coords.lat, coords.lng);
+        if (emptyName) { toast('No inspirations in ' + emptyName + ' yet… maybe soon!'); sfx('nope'); return; }
+      }
       if (panelOpen) closePanel();
     })
+    .particlesData([{ stars: [{ lat: 0, lng: 0, alt: 10 }] }])
+    .particlesList('stars')
+    .particleLat('lat').particleLng('lng').particleAltitude('alt')
     .ringsData([])
     .ringLat('lat').ringLng('lng').ringAltitude(0.021)
     .ringResolution(36).ringMaxRadius(2.4).ringPropagationSpeed(1.35).ringRepeatPeriod(1800)
@@ -378,7 +399,25 @@
   controls.autoRotate = !reduceMotion; controls.autoRotateSpeed = 0.35;
   controls.minDistance = 135; controls.maxDistance = 520; controls.zoomSpeed = 0.7; controls.rotateSpeed = 0.55;
   controls.enablePan = false;
-  var keyLight = null, rimLight = null, sunDirVec = null, cloudMesh = null;
+  var keyLight = null, rimLight = null, sunDirVec = null, cloudMesh = null, skyGroup = null, starShaderMat = null;
+  var prevSkyCamQ = null, skyDeltaQ = null, skyStepQ = null;
+  function updateSky(now) {
+    if (!skyGroup) return;
+    var cam = world.camera();
+    skyGroup.position.copy(cam.position);
+    // Continuous incremental deep-space parallax (~15% of globe rotation, zero 180-deg seam jumps).
+    if (!prevSkyCamQ) {
+      prevSkyCamQ = cam.quaternion.clone();
+      skyDeltaQ = cam.quaternion.clone();
+      skyStepQ = cam.quaternion.clone();
+    } else {
+      skyDeltaQ.copy(prevSkyCamQ).invert().premultiply(cam.quaternion);
+      skyStepQ.identity().slerp(skyDeltaQ, 0.85);
+      skyGroup.quaternion.premultiply(skyStepQ).normalize();
+      prevSkyCamQ.copy(cam.quaternion);
+    }
+    if (starShaderMat && !reduceMotion && now != null) starShaderMat.uniforms.uTime.value = now * 0.001;
+  }
   function updateLights() {
     if (!keyLight) return;
     var p = world.camera().position, len = Math.hypot(p.x, p.y, p.z) || 1;
@@ -413,6 +452,7 @@
   function cameraDir() { var p = world.camera().position, l = Math.sqrt(p.x * p.x + p.y * p.y + p.z * p.z) || 1; return [p.x / l, p.y / l, p.z / l]; }
   controls.addEventListener('change', function () {
     updateLights();
+    updateSky();
     scheduleLabelLayout(90);
     if (!NA || !pref.on || !pref.fx) { lastDir = null; return; }
     var now = performance.now(), d = cameraDir();
@@ -426,44 +466,206 @@
   });
 
   // Responsive sizing
-  function resize() { world.width(window.innerWidth).height(window.innerHeight); scheduleLabelLayout(100); }
+  function getPixelRatio() { return Math.min(1.5, window.devicePixelRatio || 1); }
+  function resize() {
+    world.width(window.innerWidth).height(window.innerHeight);
+    try { world.renderer().setPixelRatio(getPixelRatio()); } catch (e) { /* ignore */ }
+    if (starShaderMat) starShaderMat.uniforms.uPixelRatio.value = getPixelRatio();
+    scheduleLabelLayout(100);
+  }
   window.addEventListener('resize', resize); resize();
 
-  function makeStarTexture(Tex, rgb) {
-    var c = document.createElement('canvas'); c.width = 32; c.height = 32;
-    var g = c.getContext('2d'), grad = g.createRadialGradient(16, 16, 0, 16, 16, 15);
-    grad.addColorStop(0, 'rgba(' + rgb + ',1)');
-    grad.addColorStop(0.45, 'rgba(' + rgb + ',0.92)');
-    grad.addColorStop(0.65, 'rgba(' + rgb + ',0.35)');
-    grad.addColorStop(1, 'rgba(' + rgb + ',0)');
-    g.fillStyle = grad; g.fillRect(0, 0, 32, 32);
-    var tex = new Tex(c); tex.needsUpdate = true; return tex;
-  }
-  function initStarfield(Tex) {
-    var tiers = [
-      { rgb: '255,255,255', size: 2.5, count: 650, minAlt: 10, maxAlt: 22 },
-      { rgb: '185,222,255', size: 3.4, count: 290, minAlt: 11, maxAlt: 24 },
-      { rgb: '255,243,205', size: 4.4, count: 130, minAlt: 12, maxAlt: 24 }
-    ];
-    tiers.forEach(function (tier) {
-      tier.tex = makeStarTexture(Tex, tier.rgb);
-      tier.stars = [];
-      for (var i = 0; i < tier.count; i++) {
-        var u = Math.random() * 2 - 1;
-        tier.stars.push({
-          lat: Math.asin(u) * 180 / Math.PI,
-          lng: Math.random() * 360 - 180,
-          alt: tier.minAlt + Math.random() * (tier.maxAlt - tier.minAlt)
-        });
+  function addWorldBorders(scene, grat, BufGeo, FloatAttr) {
+    var LineSegs = grat.constructor;
+    var LineMat = grat.material.constructor;
+    function buildMesh(features, colorHex, opacity) {
+      var verts = [];
+      for (var fi = 0; fi < features.length; fi++) {
+        var polys = features[fi].geometry.coordinates;
+        for (var pi = 0; pi < polys.length; pi++) {
+          var ring = polys[pi][0];
+          for (var i = 0; i < ring.length - 1; i++) {
+            var a = ring[i], b = ring[i + 1];
+            if ((a[1] <= -89.8 && b[1] <= -89.8) || Math.abs(b[0] - a[0]) > 180) continue;
+            var span = Math.max(Math.abs(b[0] - a[0]), Math.abs(b[1] - a[1]));
+            var steps = span > 4 ? Math.ceil(span / 4) : 1;
+            var prev = world.getCoords(a[1], a[0], ALT.base);
+            for (var s = 1; s <= steps; s++) {
+              var t = s / steps;
+              var cur = world.getCoords(a[1] + (b[1] - a[1]) * t, a[0] + (b[0] - a[0]) * t, ALT.base);
+              verts.push(prev.x, prev.y, prev.z, cur.x, cur.y, cur.z);
+              prev = cur;
+            }
+          }
+        }
       }
+      var g = new BufGeo();
+      g.setAttribute('position', new FloatAttr(new Float32Array(verts), 3));
+      var m = new LineMat({ color: colorHex, transparent: true, opacity: opacity, depthWrite: false });
+      var lines = new LineSegs(g, m);
+      lines.raycast = function () {};
+      return lines;
+    }
+    scene.add(buildMesh(emptyGeo, 0x8ac4ff, 0.28));
+    scene.add(buildMesh(geo.filter(hasEntries), 0xffe482, 0.52));
+  }
+
+  function initDeepSky(scene, pts, atmo, globeObj, globeGrp, BufGeo, FloatAttr) {
+    var Group = globeGrp.constructor, Mesh = globeObj.constructor;
+    var ShaderMat = atmo.material.constructor;
+
+    skyGroup = new Group();
+    // 1. Seamless procedural Milky Way galactic dust backdrop (safely behind Earth at R=1400)
+    var milkyMat = new ShaderMat({
+      side: 1, depthWrite: false, depthTest: true, transparent: false,
+      vertexShader: 'varying vec3 vSkyDir;\nvoid main(){ vSkyDir = normalize(position); gl_Position = projectionMatrix * modelViewMatrix * vec4(position, 1.0); }',
+      fragmentShader: [
+        'varying vec3 vSkyDir;',
+        'void main(){',
+        '  vec3 dir = normalize(vSkyDir);',
+        '  vec3 galN = normalize(vec3(0.42, 0.78, 0.46));',
+        '  float p = dot(dir, galN);',
+        '  float band = exp(-p * p * 12.0) + 0.50 * exp(-p * p * 44.0);',
+        '  float n1 = sin(dir.x * 5.0 + dir.z * 4.0) * cos(dir.y * 6.0 - dir.x * 3.0);',
+        '  float n2 = sin(dir.z * 11.0 - dir.y * 8.0) * 0.5 + 0.5;',
+        '  float n3 = sin(dir.x * 19.0 + dir.y * 17.0 - dir.z * 15.0) * 0.5 + 0.5;',
+        '  float dust = smoothstep(-0.35, 0.78, n1) * (0.65 + 0.25 * n2 + 0.10 * n3);',
+        '  float rift = 1.0 - 0.52 * exp(-p * p * 170.0) * (0.45 + 0.55 * sin(dir.x * 9.0 + dir.y * 7.0));',
+        '  vec3 bg = vec3(0.008, 0.017, 0.048);',
+        '  vec3 gal = vec3(0.055, 0.122, 0.275) * band * (0.45 + 0.55 * dust) * rift;',
+        '  gl_FragColor = vec4(bg + gal, 1.0);',
+        '}'
+      ].join('\n')
     });
-    world
-      .particlesData(tiers)
-      .particlesList('stars')
-      .particleLat('lat').particleLng('lng').particleAltitude('alt')
-      .particlesSize('size')
-      .particlesSizeAttenuation(false)
-      .particlesTexture('tex');
+    var milkyMesh = new Mesh(globeObj.geometry, milkyMat);
+    milkyMesh.scale.setScalar(14);
+    milkyMesh.renderOrder = -20;
+    milkyMesh.frustumCulled = false;
+    milkyMesh.raycast = function () {};
+    skyGroup.add(milkyMesh);
+
+    // 2. Soft anti-aliased Gaussian GPU stars in the same deep-space group (R=1200)
+    if (pts && BufGeo && FloatAttr) {
+      var Points = pts.constructor;
+      world.particlesData([]);
+
+      var count = 1600, R = 1200;
+      var pos = new Float32Array(count * 3), col = new Float32Array(count * 3);
+      var size = new Float32Array(count), phase = new Float32Array(count), speed = new Float32Array(count);
+      var galNx = 0.42, galNy = 0.78, galNz = 0.46, gLen = Math.hypot(galNx, galNy, galNz);
+      galNx /= gLen; galNy /= gLen; galNz /= gLen;
+      for (var i = 0; i < count; i++) {
+        var x, y, z;
+        if (i < count * 0.35) {
+          // Concentrate ~35% of fainter stars near the Milky Way plane
+          var th = Math.random() * 6.2832;
+          var dPlane = (Math.random() + Math.random() - 1) * 0.24;
+          var rPlane = Math.sqrt(Math.max(0, 1 - dPlane * dPlane));
+          var ux = galNz, uy = 0, uz = -galNx, ul = Math.hypot(ux, uz) || 1;
+          ux /= ul; uz /= ul;
+          var vx = galNy * uz - galNz * uy, vy = galNz * ux - galNx * uz, vz = galNx * uy - galNy * ux;
+          var cT = Math.cos(th) * rPlane, sT = Math.sin(th) * rPlane;
+          x = cT * ux + sT * vx + dPlane * galNx;
+          y = cT * uy + sT * vy + dPlane * galNy;
+          z = cT * uz + sT * vz + dPlane * galNz;
+        } else {
+          var u = Math.random() * 2 - 1, th2 = Math.random() * 6.2832, r2 = Math.sqrt(1 - u * u);
+          x = r2 * Math.cos(th2); y = u; z = r2 * Math.sin(th2);
+        }
+        pos[i * 3] = x * R; pos[i * 3 + 1] = y * R; pos[i * 3 + 2] = z * R;
+        var mag = Math.random();
+        var bright = mag < 0.04 ? 1.0 : (mag < 0.20 ? 0.72 : 0.34 + Math.random() * 0.30);
+        var tint = Math.random();
+        if (tint < 0.26) { col[i * 3] = 0.74 * bright; col[i * 3 + 1] = 0.88 * bright; col[i * 3 + 2] = 1.0 * bright; }
+        else if (tint < 0.40) { col[i * 3] = 1.0 * bright; col[i * 3 + 1] = 0.93 * bright; col[i * 3 + 2] = 0.80 * bright; }
+        else { col[i * 3] = 0.96 * bright; col[i * 3 + 1] = 0.98 * bright; col[i * 3 + 2] = 1.0 * bright; }
+        size[i] = mag < 0.04 ? 5.4 : (mag < 0.20 ? 3.7 : 2.3 + Math.random() * 0.9);
+        phase[i] = Math.random() * 6.2832;
+        speed[i] = 0.5 + Math.random() * 1.4;
+      }
+      var sGeo = new BufGeo();
+      sGeo.setAttribute('position', new FloatAttr(pos, 3));
+      sGeo.setAttribute('aColor', new FloatAttr(col, 3));
+      sGeo.setAttribute('aSize', new FloatAttr(size, 1));
+      sGeo.setAttribute('aPhase', new FloatAttr(phase, 1));
+      sGeo.setAttribute('aSpeed', new FloatAttr(speed, 1));
+      starShaderMat = new ShaderMat({
+        transparent: true, blending: 2, depthWrite: false, depthTest: true,
+        uniforms: { uTime: { value: 0 }, uPixelRatio: { value: getPixelRatio() } },
+        vertexShader: [
+          'attribute vec3 aColor;',
+          'attribute float aSize;',
+          'attribute float aPhase;',
+          'attribute float aSpeed;',
+          'uniform float uTime;',
+          'uniform float uPixelRatio;',
+          'varying vec3 vColor;',
+          'varying float vAlpha;',
+          'void main(){',
+          '  vColor = aColor;',
+          '  vAlpha = 0.76 + 0.24 * sin(uTime * aSpeed + aPhase);',
+          '  gl_PointSize = aSize * uPixelRatio;',
+          '  gl_Position = projectionMatrix * modelViewMatrix * vec4(position, 1.0);',
+          '}'
+        ].join('\n'),
+        fragmentShader: [
+          'varying vec3 vColor;',
+          'varying float vAlpha;',
+          'void main(){',
+          '  float d = length(gl_PointCoord - vec2(0.5)) * 2.0;',
+          '  if (d > 1.0) discard;',
+          '  float core = exp(-d * d * 5.2);',
+          '  float halo = 0.35 * exp(-d * d * 2.1);',
+          '  float alpha = min(1.0, core + halo) * vAlpha;',
+          '  gl_FragColor = vec4(vColor, alpha);',
+          '}'
+        ].join('\n')
+      });
+      var starPoints = new Points(sGeo, starShaderMat);
+      starPoints.renderOrder = -19;
+      starPoints.frustumCulled = false;
+      starPoints.raycast = function () {};
+      skyGroup.add(starPoints);
+    } else {
+      console.error('Deep sky stars skipped: particles layer or BufferGeometry missing');
+    }
+    scene.add(skyGroup);
+    updateSky(performance.now());
+  }
+
+  function initSceneEnhancements() {
+    var scene = world.scene(), tries = 0;
+    var cam = world.camera();
+    if (cam && cam.far < 5000) {
+      cam.far = 50000;
+      cam.updateProjectionMatrix();
+    }
+    (function tryMount() {
+      var pts = null, grat = null, atmo = null, globeObj = null, globeGrp = null;
+      scene.traverse(function (o) {
+        if (o.isPoints && o.geometry && o.geometry.type === 'BufferGeometry' && o.geometry.attributes && o.geometry.attributes.position && (!pts || o.__globeObjType === 'particles')) pts = o;
+        if (!grat && o.isLineSegments && o.geometry && o.material) grat = o;
+        if (o.__globeObjType === 'atmosphere') atmo = o;
+        if (o.__globeObjType === 'globe') globeGrp = o;
+        if (o.isMesh && o.material === world.globeMaterial()) globeObj = o;
+      });
+      if ((!pts || !grat || !atmo || !globeObj || !globeGrp) && tries++ < 120) {
+        requestAnimationFrame(tryMount);
+        return;
+      }
+      var BufGeo = (pts && pts.geometry.constructor) || (grat && Object.getPrototypeOf(Object.getPrototypeOf(grat.geometry)).constructor);
+      var FloatAttr = (pts && pts.geometry.attributes.position.constructor) || (grat && grat.geometry.attributes.position.constructor);
+      if (grat && BufGeo && FloatAttr) {
+        try { addWorldBorders(scene, grat, BufGeo, FloatAttr); }
+        catch (e) { console.error('borders failed:', e); }
+      }
+      if (atmo && globeObj && globeGrp) {
+        try { initDeepSky(scene, pts, atmo, globeObj, globeGrp, BufGeo, FloatAttr); }
+        catch (e) { console.error('deep sky failed:', e); }
+      } else {
+        console.error('Deep sky skipped: globe meshes not ready');
+      }
+    })();
   }
 
   function loadTex(Tex, url, maxAniso, srgbSpace, onLoad) {
@@ -547,20 +749,28 @@
       cloudMesh.renderOrder = 1;
       cloudMesh.raycast = function () {};
       globeObj.add(cloudMesh);
-      if (!reduceMotion) {
-        var lastT = performance.now();
-        (function drift(now) {
-          var dt = Math.min(0.1, (now - lastT) / 1000);
-          lastT = now;
-          if (!document.hidden && cloudMesh) cloudMesh.rotation.y += dt * 0.004;
-          requestAnimationFrame(drift);
-        })(lastT);
-      }
     });
   }
 
-  // High-res 8K day/night terminator shader, 4K relief & ocean gloss, 3D clouds, and 3D starfield
+  // Unified lightweight animation loop for cloud drift & star twinkle/parallax
+  (function startSkyAndCloudLoop() {
+    if (reduceMotion) return;
+    var lastT = performance.now();
+    (function step(now) {
+      var dt = Math.min(0.1, (now - lastT) / 1000);
+      lastT = now;
+      if (!document.hidden) {
+        if (cloudMesh) cloudMesh.rotation.y += dt * 0.004;
+        updateSky(now);
+      }
+      requestAnimationFrame(step);
+    })(lastT);
+  })();
+
+  // High-res 8K day/night terminator shader, 4K relief & ocean gloss, 3D clouds, merged borders, and parallax sky
   world.onGlobeReady(function () {
+    initSceneEnhancements();
+
     try {
       var lights = world.lights();
       if (lights && lights.length >= 2) {
@@ -582,7 +792,6 @@
       if (mat.map) {
         var Tex = mat.map.constructor;
         mat.map.anisotropy = maxAniso; mat.map.needsUpdate = true;
-        initStarfield(Tex);
         if (sunDirVec) {
           var shaderUniforms = applyTwilightShader(mat, mat.map, sunDirVec);
           loadTex(Tex, 'assets/earth-night.webp', maxAniso, mat.map.colorSpace, function (nightTex) {
